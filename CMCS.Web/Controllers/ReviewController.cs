@@ -14,7 +14,7 @@ namespace CMCS.Web.Controllers
 
         public ReviewController(IClaimService claimService, UserManager<User> userManager)
         {
-            _claimService = claimService;
+            _claimService = claimService; 
             _userManager = userManager;
         }
 
