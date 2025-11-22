@@ -158,7 +158,7 @@ namespace CMCS.Web.Services
         {
             var total = hoursWorked * hourlyRate;
 
-            const decimal maxClaimAmount = 50000;
+            const decimal maxClaimAmount = 50000; 
             if (total > maxClaimAmount)
             {
                 throw new InvalidOperationException($"Claim amount exceeds maximum allowed: R{maxClaimAmount:N2}");
