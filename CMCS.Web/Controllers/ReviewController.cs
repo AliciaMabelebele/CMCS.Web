@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using CMCS.Web.Models;
-using CMCS.Web.Models.ViewModels;
 using CMCS.Web.Services;
 
 namespace CMCS.Web.Controllers
@@ -22,17 +21,16 @@ namespace CMCS.Web.Controllers
         [HttpGet]
         public async Task<IActionResult> Pending()
         {
-            var pendingClaims = await _claimService.GetPendingClaimsAsync();
-
-            var viewModel = new ReviewDashboardViewModel
+            try
             {
-                CurrentUser = await _userManager.GetUserAsync(User),
-                PendingClaimsCount = pendingClaims.Count,
-                TotalAmountPending = pendingClaims.Sum(c => c.TotalAmount),
-                PendingClaims = pendingClaims
-            };
-
-            return View(viewModel);
+                var pendingClaims = await _claimService.GetPendingClaimsAsync();
+                return View(pendingClaims);
+            }
+            catch (Exception ex)
+            {
+                TempData["ErrorMessage"] = $"Error loading pending claims: {ex.Message}";
+                return RedirectToAction("Index", "Dashboard");
+            }
         }
 
         [HttpPost]
