@@ -125,7 +125,7 @@ namespace CMCS.Web.Controllers
                     PendingClaims = pendingClaims
                 };
 
-                return View("ReviewerDashboard", viewModel);
+                return View("ReviewerDashboard", viewModel); 
             }
             catch (Exception ex)
             {
