@@ -66,7 +66,7 @@ namespace CMCS.Web.Controllers
             }
 
             ModelState.AddModelError(string.Empty, "Invalid email or password");
-            return View(model);
+            return View(model); 
         }
 
         [HttpGet]
