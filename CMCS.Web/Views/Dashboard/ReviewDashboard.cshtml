@@ -1,0 +1,105 @@
+﻿@model CMCS.Web.Models.ViewModels.ReviewDashboardViewModel
+@{
+    ViewData["Title"] = "Review Dashboard";
+}
+
+<div class="container-fluid mt-4 mb-5">
+    <div class="row mb-4">
+        <div class="col">
+            <h2 class="fw-bold">@Model.CurrentUser.Role Dashboard</h2>
+            <p class="text-muted">Review and manage pending claims</p>
+        </div>
+    </div>
+
+    <!-- Statistics -->
+    <div class="row mb-4">
+        <div class="col-md-3 mb-3">
+            <div class="card stat-card warning shadow-sm">
+                <div class="card-body">
+                    <h6 class="text-muted mb-2">Pending Review</h6>
+                    <h2 class="fw-bold text-warning">@Model.PendingClaimsCount</h2>
+                    <small class="text-muted">R @Model.TotalAmountPending.ToString("N2")</small>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 mb-3">
+            <div class="card stat-card success shadow-sm">
+                <div class="card-body">
+                    <h6 class="text-muted mb-2">Approved This Month</h6>
+                    <h2 class="fw-bold text-success">@Model.ApprovedThisMonth</h2>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 mb-3">
+            <div class="card stat-card danger shadow-sm">
+                <div class="card-body">
+                    <h6 class="text-muted mb-2">Rejected This Month</h6>
+                    <h2 class="fw-bold text-danger">@Model.RejectedThisMonth</h2>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 mb-3">
+            <div class="card stat-card shadow-sm">
+                <div class="card-body">
+                    <h6 class="text-muted mb-2">Review Rate</h6>
+                    <h2 class="fw-bold">@((Model.ApprovedThisMonth + Model.RejectedThisMonth) * 100 / Math.Max(1, Model.PendingClaimsCount + Model.ApprovedThisMonth + Model.RejectedThisMonth))%</h2>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Pending Claims Table -->
+    <div class="card shadow">
+        <div class="card-header bg-white py-3">
+            <h5 class="mb-0 fw-semibold">
+                <i class="bi bi-hourglass-split me-2"></i>Pending Claims Requiring Review
+            </h5>
+        </div>
+        <div class="card-body p-0">
+            @if (Model.PendingClaims.Any())
+            {
+                <div class="table-responsive">
+                    <table class="table table-hover mb-0">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Claim ID</th>
+                                <th>Lecturer</th>
+                                <th>Department</th>
+                                <th>Submitted</th>
+                                <th>Hours</th>
+                                <th>Amount</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var claim in Model.PendingClaims)
+                            {
+                                <tr>
+                                    <td class="fw-semibold">#@claim.ClaimId</td>
+                                    <td>@claim.Lecturer?.FullName</td>
+                                    <td>@claim.Lecturer?.Department</td>
+                                    <td>@claim.SubmissionDate.ToString("dd MMM yyyy")</td>
+                                    <td>@claim.HoursWorked</td>
+                                    <td class="fw-bold">R @claim.TotalAmount.ToString("N2")</td>
+                                    <td>
+                                        <a asp-controller="Claim" asp-action="Details" asp-route-id="@claim.ClaimId"
+                                           class="btn btn-sm btn-primary">
+                                            <i class="bi bi-eye me-1"></i>Review
+                                        </a>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+            else
+            {
+                <div class="text-center py-5">
+                    <i class="bi bi-check-circle display-1 text-success"></i>
+                    <p class="text-muted mt-3">All claims have been reviewed!</p>
+                </div>
+            }
+        </div>
+    </div>
+</div>

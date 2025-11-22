@@ -1,0 +1,188 @@
+﻿@model CMCS.Web.Models.ViewModels.SubmitClaimViewModel
+@{
+    ViewData["Title"] = "Submit Claim";
+}
+
+<div class="container mt-4 mb-5">
+    <div class="row">
+        <div class="col-lg-8 mx-auto">
+            <div class="card shadow">
+                <div class="card-header bg-primary text-white py-3">
+                    <h3 class="mb-0">
+                        <i class="bi bi-file-earmark-plus me-2"></i>Submit New Claim
+                    </h3>
+                </div>
+                <div class="card-body p-4">
+                    <form asp-action="Submit" method="post" enctype="multipart/form-data" id="claimForm">
+                        <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
+
+                        <div class="mb-4">
+                            <label asp-for="HoursWorked" class="form-label fw-semibold">
+                                <i class="bi bi-clock me-1"></i>Hours Worked
+                            </label>
+                            <input asp-for="HoursWorked" class="form-control form-control-lg"
+                                   id="HoursWorked" placeholder="0.00" step="0.01" />
+                            <span asp-validation-for="HoursWorked" class="text-danger small" id="hoursError"></span>
+                            <div class="form-text">Maximum 744 hours per month</div>
+                        </div>
+
+                        <div class="mb-4">
+                            <label asp-for="HourlyRate" class="form-label fw-semibold">
+                                <i class="bi bi-currency-dollar me-1"></i>Hourly Rate (R)
+                            </label>
+                            <input asp-for="HourlyRate" class="form-control form-control-lg"
+                                   id="HourlyRate" placeholder="350.00" step="0.01" />
+                            <span asp-validation-for="HourlyRate" class="text-danger small" id="rateError"></span>
+                            <div class="form-text">Current rate: R350.00 per hour</div>
+                        </div>
+
+                        <div class="mb-4">
+                            <div class="card bg-light border-success">
+                                <div class="card-body text-center py-4">
+                                    <h6 class="text-muted mb-2">Total Amount</h6>
+                                    <h2 class="text-success fw-bold mb-0" id="totalAmount">R 0.00</h2>
+                                    <small class="text-muted">Calculated automatically</small>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mb-4">
+                            <label asp-for="Notes" class="form-label fw-semibold">
+                                <i class="bi bi-pencil me-1"></i>Notes / Description
+                            </label>
+                            <textarea asp-for="Notes" class="form-control" rows="5"
+                                      placeholder="Describe the work performed, courses taught, etc."></textarea>
+                            <span asp-validation-for="Notes" class="text-danger small"></span>
+                            <div class="form-text">Provide details about your claim</div>
+                        </div>
+
+                        <div class="mb-4">
+                            <label class="form-label fw-semibold">
+                                <i class="bi bi-paperclip me-1"></i>Supporting Documents
+                            </label>
+                            <input type="file" name="Documents" class="form-control" multiple
+                                   accept=".pdf,.docx,.xlsx,.png,.jpg,.jpeg" id="fileInput" />
+                            <div class="form-text">
+                                Accepted formats: PDF, DOCX, XLSX, PNG, JPG (Max 5MB each)
+                            </div>
+                            <div id="fileList" class="mt-2"></div>
+                        </div>
+
+                        <div class="d-flex justify-content-between mt-4">
+                            <a asp-controller="Dashboard" asp-action="Index" class="btn btn-secondary btn-lg">
+                                <i class="bi bi-x-circle me-2"></i>Cancel
+                            </a>
+                            <button type="submit" class="btn btn-primary btn-lg">
+                                <i class="bi bi-check-circle me-2"></i>Submit Claim
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <div class="card mt-4 border-info">
+                <div class="card-body">
+                    <h6 class="card-title">
+                        <i class="bi bi-info-circle-fill text-info me-2"></i>Submission Guidelines
+                    </h6>
+                    <ul class="mb-0 small">
+                        <li>Enter accurate hours worked for the month</li>
+                        <li>Attach all relevant supporting documents</li>
+                        <li>Provide detailed notes about the work performed</li>
+                        <li>Claims are reviewed within 5 business days</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+        $(document).ready(function() {
+            const hoursInput = $('#HoursWorked');
+            const rateInput = $('#HourlyRate');
+            const totalDisplay = $('#totalAmount');
+            const fileInput = $('#fileInput');
+            const fileList = $('#fileList');
+
+            function calculateTotal() {
+                const hours = parseFloat(hoursInput.val()) || 0;
+                const rate = parseFloat(rateInput.val()) || 0;
+                const total = hours * rate;
+
+                totalDisplay.fadeOut(200, function() {
+                    $(this).text('R ' + total.toFixed(2)).fadeIn(200);
+                });
+
+                validateHours(hours);
+                validateRate(rate);
+            }
+
+            function validateHours(hours) {
+                const hoursError = $('#hoursError');
+                if (hours > 744) {
+                    hoursInput.addClass('is-invalid').removeClass('is-valid');
+                    hoursError.text('Hours cannot exceed 744 per month');
+                } else if (hours <= 0) {
+                    hoursInput.addClass('is-invalid').removeClass('is-valid');
+                    hoursError.text('Hours must be greater than 0');
+                } else {
+                    hoursInput.removeClass('is-invalid').addClass('is-valid');
+                    hoursError.text('');
+                }
+            }
+
+            function validateRate(rate) {
+                const rateError = $('#rateError');
+                if (rate > 10000) {
+                    rateInput.addClass('is-invalid').removeClass('is-valid');
+                    rateError.text('Rate cannot exceed R10,000');
+                } else if (rate <= 0) {
+                    rateInput.addClass('is-invalid').removeClass('is-valid');
+                    rateError.text('Rate must be greater than 0');
+                } else {
+                    rateInput.removeClass('is-invalid').addClass('is-valid');
+                    rateError.text('');
+                }
+            }
+
+            fileInput.on('change', function() {
+                const files = this.files;
+                fileList.empty();
+
+                if (files.length > 0) {
+                    const ul = $('<ul class="list-group"></ul>');
+                    for (let i = 0; i < files.length; i++) {
+                        const file = files[i];
+                        const size = (file.size / 1024).toFixed(2);
+                        ul.append(`
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                <span><i class="bi bi-file-earmark me-2"></i>${file.name}</span>
+                                <span class="badge bg-secondary">${size} KB</span>
+                            </li>
+                        `);
+                    }
+                    fileList.append(ul);
+                }
+            });
+
+            hoursInput.on('input', calculateTotal);
+            rateInput.on('input', calculateTotal);
+
+            calculateTotal();
+
+            $('#claimForm').on('submit', function(e) {
+                const hours = parseFloat(hoursInput.val()) || 0;
+                const rate = parseFloat(rateInput.val()) || 0;
+
+                if (hours <= 0 || hours > 744 || rate <= 0 || rate > 10000) {
+                    e.preventDefault();
+                    alert('Please fix validation errors before submitting.');
+                    return false;
+                }
+            });
+        });
+    </script>
+}

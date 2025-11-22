@@ -1,0 +1,124 @@
+﻿@model CMCS.Web.Models.ViewModels.HRDashboardViewModel
+@{
+    ViewData["Title"] = "HR Dashboard";
+}
+
+<div class="container-fluid mt-4 mb-5">
+    <div class="row mb-4">
+        <div class="col">
+            <h2 class="fw-bold">
+                <i class="bi bi-people-fill me-2"></i>HR Dashboard
+            </h2>
+            <p class="text-muted">Manage lecturers and process payments</p>
+        </div>
+        <div class="col-auto">
+            <a asp-action="GenerateInvoice" class="btn btn-primary">
+                <i class="bi bi-file-earmark-text me-2"></i>Generate Invoice
+            </a>
+        </div>
+    </div>
+
+    <div class="row mb-4">
+        <div class="col-md-3 mb-3">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h6 class="text-muted mb-2">Total Lecturers</h6>
+                    <h2 class="fw-bold">@Model.TotalLecturers</h2>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 mb-3">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h6 class="text-muted mb-2">Total Claims</h6>
+                    <h2 class="fw-bold">@Model.TotalClaims</h2>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 mb-3">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h6 class="text-muted mb-2">This Month</h6>
+                    <h2 class="fw-bold text-success">R @Model.TotalPaymentsThisMonth.ToString("N2")</h2>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 mb-3">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h6 class="text-muted mb-2">All Time</h6>
+                    <h2 class="fw-bold text-success">R @Model.TotalPaymentsAllTime.ToString("N2")</h2>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-7 mb-4">
+            <div class="card shadow">
+                <div class="card-header bg-white py-3">
+                    <h5 class="mb-0 fw-semibold">
+                        <i class="bi bi-people me-2"></i>Lecturer Summary
+                    </h5>
+                </div>
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <table class="table table-hover mb-0">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Lecturer</th>
+                                    <th>Department</th>
+                                    <th>Claims</th>
+                                    <th>Total</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var lecturer in Model.LecturerSummaries)
+                                {
+                                    <tr>
+                                        <td class="fw-semibold">@lecturer.LecturerName</td>
+                                        <td>@lecturer.Department</td>
+                                        <td>
+                                            <span class="badge bg-primary">@lecturer.TotalClaims</span>
+                                            @if (lecturer.PendingClaims > 0)
+                                            {
+                                                <span class="badge bg-warning text-dark">@lecturer.PendingClaims pending</span>
+                                            }
+                                        </td>
+                                        <td class="fw-bold text-success">R @lecturer.TotalAmount.ToString("N2")</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-5 mb-4">
+            <div class="card shadow">
+                <div class="card-header bg-white py-3">
+                    <h5 class="mb-0 fw-semibold">
+                        <i class="bi bi-check-circle me-2"></i>Recent Approved Claims
+                    </h5>
+                </div>
+                <div class="card-body p-0">
+                    <div class="list-group list-group-flush">
+                        @foreach (var claim in Model.RecentApprovedClaims)
+                        {
+                            <div class="list-group-item">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <h6 class="mb-1">#@claim.ClaimId - @claim.Lecturer?.FullName</h6>
+                                        <small class="text-muted">@claim.ApprovalDate?.ToString("dd MMM yyyy")</small>
+                                    </div>
+                                    <span class="badge bg-success">R @claim.TotalAmount.ToString("N2")</span>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

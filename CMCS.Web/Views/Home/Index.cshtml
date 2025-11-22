@@ -1,0 +1,91 @@
+﻿@{
+    ViewData["Title"] = "Home";
+}
+
+<div class="container">
+    <div class="row min-vh-100 align-items-center">
+        <div class="col-lg-6 mb-5 mb-lg-0">
+            <h1 class="display-3 fw-bold mb-4">
+                Contract Monthly Claim System
+            </h1>
+            <p class="lead text-muted mb-4">
+                Streamline your monthly claim submissions with our automated, efficient, and secure platform.
+                Designed for lecturers, coordinators, managers, and HR personnel.
+            </p>
+            <div class="d-flex gap-3">
+                @if (User.Identity?.IsAuthenticated == true)
+                {
+                    <a asp-controller="Dashboard" asp-action="Index" class="btn btn-primary btn-lg">
+                        <i class="bi bi-speedometer2 me-2"></i>Go to Dashboard
+                    </a>
+                }
+                else
+                {
+                    <a asp-controller="Account" asp-action="Login" class="btn btn-primary btn-lg">
+                        <i class="bi bi-box-arrow-in-right me-2"></i>Login
+                    </a>
+                    <a asp-controller="Account" asp-action="Register" class="btn btn-outline-primary btn-lg">
+                        <i class="bi bi-person-plus me-2"></i>Register
+                    </a>
+                }
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <div class="card shadow-lg border-0">
+                <div class="card-body p-0">
+                    <img src="https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?w=800"
+                         alt="Business" class="img-fluid rounded" />
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row py-5 my-5">
+        <div class="col-12 text-center mb-5">
+            <h2 class="display-5 fw-bold">Key Features</h2>
+            <p class="lead text-muted">Everything you need to manage monthly claims efficiently</p>
+        </div>
+
+        <div class="col-md-4 mb-4">
+            <div class="card h-100 border-0 shadow-sm text-center p-4">
+                <div class="card-body">
+                    <div class="bg-primary bg-opacity-10 rounded-circle d-inline-flex p-4 mb-3">
+                        <i class="bi bi-calculator-fill text-primary" style="font-size: 3rem;"></i>
+                    </div>
+                    <h4 class="fw-bold mb-3">Automated Calculations</h4>
+                    <p class="text-muted">
+                        Real-time automatic calculation of claim amounts based on hours worked and hourly rates.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4 mb-4">
+            <div class="card h-100 border-0 shadow-sm text-center p-4">
+                <div class="card-body">
+                    <div class="bg-success bg-opacity-10 rounded-circle d-inline-flex p-4 mb-3">
+                        <i class="bi bi-shield-check text-success" style="font-size: 3rem;"></i>
+                    </div>
+                    <h4 class="fw-bold mb-3">Secure & Compliant</h4>
+                    <p class="text-muted">
+                        Role-based access control ensures only authorized personnel can view and process claims.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4 mb-4">
+            <div class="card h-100 border-0 shadow-sm text-center p-4">
+                <div class="card-body">
+                    <div class="bg-info bg-opacity-10 rounded-circle d-inline-flex p-4 mb-3">
+                        <i class="bi bi-graph-up-arrow text-info" style="font-size: 3rem;"></i>
+                    </div>
+                    <h4 class="fw-bold mb-3">Real-time Tracking</h4>
+                    <p class="text-muted">
+                        Track your claim status in real-time from submission to approval.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

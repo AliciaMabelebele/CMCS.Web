@@ -1,0 +1,75 @@
+﻿@model CMCS.Web.Models.ViewModels.LoginViewModel
+@{
+    ViewData["Title"] = "Login";
+}
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6 col-lg-5">
+            <div class="card shadow-lg">
+                <div class="card-body p-5">
+                    <div class="text-center mb-4">
+                        <i class="bi bi-file-text-fill text-primary" style="font-size: 3rem;"></i>
+                        <h2 class="mt-3 fw-bold">Contract Monthly Claim System</h2>
+                        <p class="text-muted">Sign in to your account</p>
+                    </div>
+
+                    <form asp-action="Login" method="post">
+                        <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
+
+                        <div class="mb-3">
+                            <label asp-for="Email" class="form-label fw-semibold">
+                                <i class="bi bi-envelope me-1"></i>Email Address
+                            </label>
+                            <input asp-for="Email" class="form-control form-control-lg" placeholder="your@email.com" />
+                            <span asp-validation-for="Email" class="text-danger small"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="Password" class="form-label fw-semibold">
+                                <i class="bi bi-lock me-1"></i>Password
+                            </label>
+                            <input asp-for="Password" class="form-control form-control-lg" placeholder="••••••••" />
+                            <span asp-validation-for="Password" class="text-danger small"></span>
+                        </div>
+
+                        <div class="mb-3 form-check">
+                            <input asp-for="RememberMe" class="form-check-input" />
+                            <label asp-for="RememberMe" class="form-check-label">
+                                Remember me
+                            </label>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary btn-lg w-100 mb-3">
+                            <i class="bi bi-box-arrow-in-right me-2"></i>Sign In
+                        </button>
+
+                        <div class="text-center">
+                            <p class="text-muted mb-0">
+                                Don't have an account?
+                                <a asp-action="Register" class="text-decoration-none fw-semibold">Register here</a>
+                            </p>
+                        </div>
+                    </form>
+
+                    <hr class="my-4">
+
+                    <div class="bg-light p-3 rounded">
+                        <p class="small fw-semibold mb-2"><i class="bi bi-info-circle me-1"></i>Demo Accounts</p>
+                        <ul class="small mb-0">
+                            <li><strong>Lecturer:</strong> lecturer@cmcs.com</li>
+                            <li><strong>Coordinator:</strong> coordinator@cmcs.com</li>
+                            <li><strong>Manager:</strong> manager@cmcs.com</li>
+                            <li><strong>HR:</strong> hr@cmcs.com</li>
+                            <li class="mt-2"><strong>Password:</strong> password123</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
