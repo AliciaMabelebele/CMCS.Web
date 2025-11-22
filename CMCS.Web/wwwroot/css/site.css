@@ -83,7 +83,7 @@ body {
 
 #totalAmount {
     font-size: 2rem;
-    color: var(--success-color);
+    color: var(--success-color); 
     font-weight: bold;
 }
 
