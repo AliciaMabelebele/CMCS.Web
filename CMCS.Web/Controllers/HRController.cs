@@ -10,7 +10,7 @@ namespace CMCS.Web.Controllers
     [Authorize(Roles = "HR")]
     public class HRController : Controller
     {
-        private readonly ApplicationDbContext _context;
+        private readonly ApplicationDbContext _context; 
 
         public HRController(ApplicationDbContext context)
         {
